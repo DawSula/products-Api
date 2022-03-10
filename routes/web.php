@@ -13,4 +13,5 @@ use App\Http\Controllers\ProductController;
 |
 */
 
-Route::get('/', [ProductController::class, 'list'] );
+Route::get('/', [ProductController::class, 'list'] )->name('list');
+Route::post('/add', [ProductController::class, 'add'])->name('add');

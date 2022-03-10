@@ -12,7 +12,45 @@
 
 </head>
 <body class="antialiased">
-hello
+<div class="container">
+
+
+    <form method="post" action="{{route('add')}}">
+        @csrf
+        <div class="mb-3">
+            <label for="InputName" class="form-label">Email address</label>
+            <input type="text" name="name" class="form-control" id="InputName">
+        </div>
+        <div class="mb-3">
+            <label for="InputPrice" class="form-label">Password</label>
+            <input type="number" name="price" class="form-control" id="InputPrice">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <table class="table">
+        <thead>
+        <tr>
+
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($products ?? [] as $product)
+        <tr>
+            <th scope="row">{{$loop->iteration}}</th>
+            <td>{{$product->name}}</td>
+            <td>{{$product->price}}</td>
+
+        </tr>
+        @endforeach
+        </tbody>
+    </table>
+</div>
 
 
 
