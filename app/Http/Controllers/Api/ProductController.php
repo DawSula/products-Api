@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AddProduct;
+use App\Http\Resources\ProductsResource;
+use App\Repositories\ProductRepository;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Http\Requests\AddProduct;
-use App\Repositories\ProductRepository;
 
 class ProductController extends Controller
 {
     private ProductRepository $product;
-
     public function __construct(ProductRepository $product)
     {
         $this->product = $product;
@@ -18,22 +19,23 @@ class ProductController extends Controller
 
     public function list(){
 
-        return view('list', ['products'=>Product::all()]);
+        return ProductsResource::collection(Product::all());
     }
 
-    public function add(AddProduct $request){
+    public function create(AddProduct $request){
             $data = $request->validated();
             $this->product->addProduct($data);
 
 
-            return redirect()->route('list');
+            return response()->json('Product added successfully');
     }
 
-    public function update(Request $request){
+    public function update(Request $request, $id){
         $data = $request->all();
-        $product = Product::find($data['id']);
+        $product = Product::find($id);
         $this->product->updateProduct($product, $data);
-        return redirect()->route('list');
+
+        return response()->json('Product updated successfully');
 
     }
 }
