@@ -6,7 +6,7 @@ use App\Models\Product;
 
 class Cart
 {
-    private $items;
+    private $items = [];
     private $price;
 
     public function __construct($items)
@@ -14,24 +14,49 @@ class Cart
         $this->items = $items ?? [];
     }
 
-    public function addItem(Product $data){
+    public function addItem(Product $data)
+    {
 
-        if(array_key_exists($data->id, $this->items)){
-            $this->items[$data->id]['count']++;
-            $this->items[$data->id]['totalPrice']+= $data->price;
+
+
+        if ($this->checkId($data->id, $this->items)) {
+            foreach ($this->items as $key => $value) {
+                if ($value['id'] == $data->id) {
+                    $this->items[$key]['count']++;
+                    $this->items[$key]['totalPrice'] += $data->price;
+                }
+            }
         }
-        else{
-            $this->items[$data->id] = [
+        else {
+            array_push($this->items, [
+                'id' => $data->id,
                 'title' => $data->name,
                 'totalPrice' => $data->price,
-                'count'=> 1,
-            ];
+                'count' => 1,
+                'href'=>[
+                    'product'=> route('show',$data->id)
+                ],
+            ]);
         }
-
     }
 
-    public function getItems(){
+
+
+    public function getItems()
+    {
         return $this->items;
     }
-}
 
+    private function checkId($id, $data): bool
+    {
+
+        foreach ($data as $value) {
+
+            if ($value['id'] == $id) {
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+}

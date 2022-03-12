@@ -16,7 +16,8 @@ class ProductController extends Controller
         $this->product = $product;
     }
 
-    public function list(){
+    public function list(Request $request){
+
 
         return view('list', ['products'=>Product::all()]);
     }

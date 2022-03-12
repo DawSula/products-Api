@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductsResource extends JsonResource
+class ProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,9 +18,6 @@ class ProductsResource extends JsonResource
             'id'=>$this->id,
             'title'=>ucfirst(strtolower($this->name)),
             'price'=>number_format($this->price, 2, '.', ' ') . " USD",
-            'href' => [
-                'product'=> route('show',$this->id)
-            ]
         ];
     }
 }

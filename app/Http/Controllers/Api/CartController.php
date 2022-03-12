@@ -22,40 +22,19 @@ class CartController extends Controller
     public function list(){
 
         $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
+        $sessionCart = $this->request->session()->get('cart');
 
-        return response()->json($sessionCart, 204);
+        return response()->json(['data'=>$sessionCart]);
     }
-    public function update(){
-        $data = $this->request->all();
-        // $this->request->session()->forget('cart');
-        // return redirect()->route('list');
+    public function add($id){
 
-        $product = Product::find($data['id']);
+        $product = Product::find($id);
         $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
         $cart = new Cart($sessionCart);
         $cart->addItem($product);
-        $products = $cart->getItems();
+        $this->request->session()->put('cart', $cart->getItems());
 
-        $sessionCart = $this->request->session()->put('cart', $products);
-        dd($product);
         return response()->json('Added to shopping cart succesfully');
     }
-    public function create(){
-        $this->request->session()->start();
-        $data = $this->request->all();
-        // $this->request->session()->forget('cart');
-        // return redirect()->route('list');
 
-        $product = Product::find($data['id']);
-        $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
-        $cart = new Cart($sessionCart);
-        $cart->addItem($product);
-        $products = $cart->getItems();
-
-        $sessionCart = $this->request->session()->put('cart', $products);
-        $c = $this->request->session()->put('key', 'hello');
-        dd($c);
-
-        return response()->json('Shopping cart created successfully');
-    }
 }

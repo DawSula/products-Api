@@ -21,9 +21,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('products', [ProductController::class, 'list']);
+Route::get('products/{id}', [ProductController::class, 'show'])->name('show');
 Route::post('products', [ProductController::class, 'create']);
 Route::put('products/{id}', [ProductController::class, 'update']);
 
 Route::get('cart', [CartController::class, 'list']);
-Route::post('cart', [CartController::class, 'create']);
-Route::put('cart', [CartController::class, 'update']);
+Route::post('cart/{id}', [CartController::class, 'add']);
+
