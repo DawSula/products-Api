@@ -16,10 +16,10 @@ class ProductsResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'title'=>ucfirst(strtolower($this->name)),
+            'title'=>ucfirst(strtolower($this->title)),
             'price'=>number_format($this->price, 2, '.', ' ') . " USD",
             'href' => [
-                'product'=> route('show',$this->id)
+                'product'=> route('products.show',$this->id)
             ]
         ];
     }

@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Facade\Filter;
 use App\Models\Product;
-use Carbon\Carbon;
 
 //use Your Model
 
@@ -12,25 +12,25 @@ use Carbon\Carbon;
  */
 class ProductRepository
 {
-  private Product $product;
 
-  public function __construct(Product $product)
-  {
-    $this->product = $product;
-  }
+    public function addProduct($data)
+    {
+        $newProduct = new Product([
+            'title' => Filter::formatData($data['title']),
+            'price' => (float) number_format(str_replace(" ", "", $data['price']), 2, '.', ''),
+        ]);
 
-  public function addProduct($data){
-      $newProduct = new Product([
-          'name'=> $data['name'],
-          'price'=> (float) $data['price'],
-      ]);
+        $newProduct->save();
+    }
 
-      $newProduct->save();
-  }
+    public function updateProduct(Product $product, array $data)
+    {
 
-  public function updateProduct(Product $product, array $data){
-    $product->name = $data['name'];
-    $product->price = $data['price'];
-    $product->save();
-  }
+        $title = $data['title'] ?? null;
+        $price = $data['price'] ?? null;
+
+        $product->title = $title ? Filter::formatData($data['title']) : $product->title;
+        $product->price = $price ? (float) number_format(str_replace(" ", "", $data['price']), 2, '.', '') : $product->price;
+        $product->save();
+    }
 }

@@ -16,8 +16,8 @@ class ProductResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'title'=>ucfirst(strtolower($this->name)),
-            'price'=>number_format($this->price, 2, '.', ' ') . " USD",
+            'title'=>ucfirst(strtolower($this->title)),
+            'price'=> number_format($this->price, 2, '.', ' ') . " USD",
         ];
     }
 }

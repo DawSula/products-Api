@@ -6,7 +6,7 @@ use App\Helpers\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Session\Session;
+use Exception;
 
 class CartController extends Controller
 
@@ -19,22 +19,32 @@ class CartController extends Controller
         $this->request = $request;
     }
 
-    public function list(){
+    public function list()
+    {
+        try {
+            $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
+            $sessionTotalPrice = $this->request->session()->has('totalPrice') ? $this->request->session()->get('totalPrice') : null;
+            $sessionCart = $this->request->session()->get('cart');
+            $sessionTotalPrice = $this->request->session()->get('totalPrice');
 
-        $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
-        $sessionCart = $this->request->session()->get('cart');
-
-        return response()->json(['data'=>$sessionCart]);
+            return response()->json(['data' => $sessionCart, 'totalPrice' => $sessionTotalPrice]);
+        } catch (Exception $e) {
+            return response()->json(['errors' => [['message' => 'cart error']]]);
+        }
     }
-    public function add($id){
+    public function add($id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+            $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
+            $cart = new Cart($sessionCart);
+            $cart->addItem($product);
+            $this->request->session()->put('cart', $cart->getItems());
+            $this->request->session()->put('totalPrice', $cart->getTotalPrice());
 
-        $product = Product::find($id);
-        $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
-        $cart = new Cart($sessionCart);
-        $cart->addItem($product);
-        $this->request->session()->put('cart', $cart->getItems());
-
-        return response()->json('Added to shopping cart succesfully');
+            return response()->json('Added to shopping cart succesfully');
+        } catch (Exception $e) {
+            return response()->json(['errors' => [['message' => 'Cant add item to cart']]]);
+        }
     }
-
 }

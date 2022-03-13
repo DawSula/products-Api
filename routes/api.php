@@ -20,11 +20,26 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('products', [ProductController::class, 'list']);
-Route::get('products/{id}', [ProductController::class, 'show'])->name('show');
-Route::post('products', [ProductController::class, 'create']);
-Route::put('products/{id}', [ProductController::class, 'update']);
+Route::group(
+    [
+        'prefix' => 'products',
+        'as' => 'products.'
+    ],
+    function () {
+        Route::get('/', [ProductController::class, 'list'])->name('list');
+        Route::get('{id}', [ProductController::class, 'show'])->name('show');
+        Route::post('/', [ProductController::class, 'create'])->name('create');
+        Route::put('{id}', [ProductController::class, 'update'])->name('update');
+    }
+);
 
-Route::get('cart', [CartController::class, 'list']);
-Route::post('cart/{id}', [CartController::class, 'add']);
-
+Route::group(
+    [
+        'prefix' => 'cart',
+        'as' => 'cart.'
+    ],
+    function () {
+        Route::get('/', [CartController::class, 'list'])->name('list');
+        Route::post('{id}', [CartController::class, 'add'])->name('add');
+    }
+);

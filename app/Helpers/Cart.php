@@ -31,20 +31,33 @@ class Cart
             array_push($this->items, [
                 'id' => $data->id,
                 'title' => $data->name,
-                'totalPrice' => $data->price,
+                'totalPrice' => (float) number_format($data->price, 2, '.', ' '),
                 'count' => 1,
                 'href'=>[
-                    'product'=> route('show',$data->id)
+                    'product'=> route('products.show',$data->id)
                 ],
             ]);
         }
     }
 
-
-
     public function getItems()
     {
         return $this->items;
+    }
+
+    public function getTotalPrice(){
+        $this->countPrice();
+        return $this->price;
+    }
+
+    private function countPrice(){
+        $totalPrice = 0;
+
+        foreach($this->items as $value){
+            $totalPrice += $value['totalPrice'];
+        };
+
+        $this->price = $totalPrice;
     }
 
     private function checkId($id, $data): bool
