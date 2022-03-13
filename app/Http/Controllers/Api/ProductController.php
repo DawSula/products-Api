@@ -52,8 +52,7 @@ class ProductController extends Controller
     public function update(AddProduct $request, $id)
     {
         try {
-            $data = $request->validate();
-            dd($data);
+            $data = $request->validated();
             $product = Product::findOrFail($id);
             $this->product->updateProduct($product, $data);
 

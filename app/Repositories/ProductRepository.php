@@ -17,8 +17,9 @@ class ProductRepository
     {
         $newProduct = new Product([
             'title' => Filter::formatData($data['title']),
-            'price' => (float) number_format(str_replace(" ", "", $data['price']), 2, '.', ''),
+            'price' => round(($data['price']), 2),
         ]);
+
 
         $newProduct->save();
     }
@@ -30,7 +31,7 @@ class ProductRepository
         $price = $data['price'] ?? null;
 
         $product->title = $title ? Filter::formatData($data['title']) : $product->title;
-        $product->price = $price ? (float) number_format(str_replace(" ", "", $data['price']), 2, '.', '') : $product->price;
+        $product->price = $price ? round(($data['price']), 2) : $product->price;
         $product->save();
     }
 }
