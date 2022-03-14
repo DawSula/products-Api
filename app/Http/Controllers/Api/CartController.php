@@ -32,9 +32,6 @@ class CartController extends Controller
     public function add($id)
     {
         try {
-            $this->request->session()->forget('cart');
-            $this->request->session()->forget('totalPrice');
-            return response()->json();
             $product = Product::findOrFail($id);
             $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
             $cart = new Cart($sessionCart);
