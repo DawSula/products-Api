@@ -7,7 +7,7 @@ use App\Models\Product;
 class Cart
 {
     private $items = [];
-    private $price;
+    private float $price;
 
     public function __construct($items)
     {
@@ -20,34 +20,26 @@ class Cart
             foreach ($this->items as $key => $value) {
                 if ($value['id'] == $data->id) {
                     $this->items[$key]['count']++;
-                    $this->items[$key]['totalPrice'] = round((float) ($data->price + (float) $this->items[$key]['totalPrice']), 2);
+                    $this->items[$key]['totalPrice'] = round(($data->price +  $this->items[$key]['totalPrice']), 2);
                 }
             }
         } else {
             $this->items[] = [
                 'id' => $data->id,
                 'title' => $data->title,
-                'totalPrice'=> round(((float)$data->price),2),
+                'totalPrice' => round($data->price, 2),
                 'count' => 1,
                 'href' => [
                     'product' => route('products.show', $data->id)
                 ],
             ];
+
         }
     }
 
     public function getItems()
     {
-        $items = array_map(function ($arr){
-
-            if ($arr['totalPrice']){
-                $arr['totalPrice'] = number_format( ((float)$arr['totalPrice']), 2, '.', ' ') . ' USD';
-            }
-            return $arr;
-
-        }, $this->items);
-
-        return $items;
+        return $this->items;
     }
 
     public function getTotalPrice()
@@ -61,7 +53,7 @@ class Cart
         $totalPrice = 0;
 
         foreach ($this->items as $value) {
-            $totalPrice += (float) $value['totalPrice'];
+            $totalPrice += $value['totalPrice'];
         };
         $this->price = $totalPrice;
     }

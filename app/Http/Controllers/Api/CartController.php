@@ -31,7 +31,10 @@ class CartController extends Controller
     }
     public function add($id)
     {
-        try {
+//        try {
+//            $this->request->session()->forget('cart');
+//            $this->request->session()->forget('totalPrice');
+//            return response()->json();
             $product = Product::findOrFail($id);
             $sessionCart = $this->request->session()->has('cart') ? $this->request->session()->get('cart') : null;
             $cart = new Cart($sessionCart);
@@ -41,8 +44,8 @@ class CartController extends Controller
 
 
             return response()->json('Added to shopping cart succesfully');
-        } catch (Exception $e) {
-            return response()->json(['errors' => [['message' => 'Cant add item to cart']]]);
-        }
+//        } catch (Exception $e) {
+//            return response()->json(['errors' => [['message' => 'Cant add item to cart']]]);
+//        }
     }
 }
